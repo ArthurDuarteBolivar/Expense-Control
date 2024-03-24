@@ -1,0 +1,26 @@
+<main>
+    <form [formGroup]="form">
+        <h1>Enter with your account</h1>
+        <mat-form-field class="example-full-width">
+            <mat-label>Email</mat-label>
+            <input type="email" matInput placeholder="Email" formControlName="email">
+            @if (form.get('email')?.hasError('email')) {
+            <mat-error>Please enter a valid email address</mat-error>
+            }
+            @if (form.get('email')?.hasError('required')) {
+            <mat-error>Email is <strong>required</strong></mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+            <mat-label>Password</mat-label>
+            <input type="password" matInput placeholder="Password" formControlName="password">
+            @if (form.get('password')?.hasError('required')) {
+            <mat-error>Password is <strong>required</strong></mat-error>
+            }
+        </mat-form-field>
+        <button mat-button test-id="recover-password-button" [disabled]="!form.get('email')!.valid">Recover
+            password</button>
+        <button mat-raised-button color="primary" test-id="login-button" [disabled]="!form.valid">LOGIN</button>
+        <button mat-stroked-button color="primary">REGISTER</button>
+    </form>
+</main>
