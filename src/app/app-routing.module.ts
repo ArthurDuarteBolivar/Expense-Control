@@ -1,8 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { authGuard } from './guards/auth.guard';
 
 const routes: Routes = [
-  {path: "singin", loadChildren: () => import('./pages/singin/singin.module').then(m => m.SinginModule)}
+  {path: "singin", loadChildren: () => import('./pages/singin/singin.module').then(m => m.SinginModule)},
+  {path: "home", loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule), canActivate: [authGuard]},
+  {path: "**", redirectTo: "singin"}
 ];
 
 @NgModule({

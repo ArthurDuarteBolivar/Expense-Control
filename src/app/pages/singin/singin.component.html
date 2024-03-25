@@ -20,7 +20,9 @@
         </mat-form-field>
         <button mat-button test-id="recover-password-button" [disabled]="!form.get('email')!.valid">Recover
             password</button>
-        <button mat-raised-button color="primary" test-id="login-button" [disabled]="!form.valid">LOGIN</button>
+        <button mat-raised-button color="primary" test-id="login-button" [disabled]="!form.valid" (click)="login()" *ngIf="!isLogginIn">LOGIN</button>
+        <button mat-raised-button color="primary" test-id="login-loader" *ngIf="isLogginIn"><mat-spinner diameter="20"
+                color="accent"></mat-spinner></button>
         <button mat-stroked-button color="primary">REGISTER</button>
     </form>
 </main>
