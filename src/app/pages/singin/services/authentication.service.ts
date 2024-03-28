@@ -15,20 +15,17 @@ export class AuthenticationService {
     return from(this.auth.signInWithEmailAndPassword(params.email, params.password))
   }
 
+  recoverPassword(email: string): Observable<void>{
+    return from(this.auth.sendPasswordResetEmail(email))
+  }
+
+  register(params: SingIn){
+    return from(this.auth.createUserWithEmailAndPassword(params.email, params.password))
+  }
+
 }
 
 type SingIn = {
   email: string,
   password: string
-}
-
-type SingInResponse = {
-  kind:         string;
-  localId:      string;
-  email:        string;
-  displayName:  string;
-  idToken:      string;
-  registered:   boolean;
-  refreshToken: string;
-  expiresIn:    string;
 }

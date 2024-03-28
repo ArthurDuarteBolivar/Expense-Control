@@ -32,7 +32,8 @@ describe('SinginComponent', () => {
         ReactiveFormsModule,
         MatProgressSpinnerModule,
         RouterTestingModule.withRoutes([
-          { path: 'home', component: BlankComponent }
+          { path: 'home', component: BlankComponent },
+          { path: 'register', component: BlankComponent }
         ]),
         MatSnackBarModule
       ]
@@ -163,6 +164,68 @@ describe('SinginComponent', () => {
     })
   })
 
+  describe('Recover password flow', () => {
+    describe('given user clicks on recover password button', () => {
+      beforeEach(() => {
+        setEmail('valid@email.com');
+        recoverPasswordButton().click();
+        fixture.detectChanges()
+      })
+
+      it('then show recover password loader', () => {
+        expect(recoverPasswordLoader()).not.toBeNull()
+      })
+      it('then hide recover password', () => {
+        expect(recoverPasswordButton()).toBeNull()
+      })
+      describe('when recover password success', () => {
+        beforeEach(() => {
+          authenticationService._recoverPasswordResponse.next({})
+          fixture.detectChanges()
+        })
+        it('then hide recover password loader', () => {
+          expect(recoverPasswordLoader()).toBeNull()
+        })
+        it('then show recover password button', () => {
+          expect(recoverPasswordButton()).not.toBeNull()
+        })
+        it('then show success message', () => {
+          expect(snackBar._isOpened).toBeTruthy()
+        })
+      })
+      describe('when recover password success', () => {
+        beforeEach(() => {
+          authenticationService._recoverPasswordResponse.error({ message: "anyError" })
+          fixture.detectChanges()
+        })
+        it('then hide recover password loader', () => {
+          expect(recoverPasswordLoader()).toBeNull()
+        })
+        it('then show recover password button', () => {
+          expect(recoverPasswordButton()).not.toBeNull()
+        })
+        it('then show error message', () => {
+          expect(snackBar._isOpened).toBeTruthy()
+        })
+      })
+    })
+  })
+
+  describe('Register flow', () => {
+    describe('click on the button to register', () => {
+      beforeEach(() => {
+        registerButton().click();
+        fixture.detectChanges();
+      })
+      it('then go to registration page', done => {
+        setTimeout(() => {
+          expect(location.path()).toEqual('/register');
+          done();
+        }, 100);
+      })
+    })
+  })
+
   function setEmail(value: string) {
     component.form.get('email')?.setValue(value);
     fixture.detectChanges()
@@ -176,6 +239,10 @@ describe('SinginComponent', () => {
     return page.querySelector('[test-id="recover-password-button"]')
   }
 
+  function recoverPasswordLoader() {
+    return page.querySelector('[test-id="recover-password-loader"]')
+  }
+
   function loginButton() {
     return page.querySelector('[test-id="login-button"]')
   }
@@ -183,13 +250,21 @@ describe('SinginComponent', () => {
   function loginLoader() {
     return page.querySelector('[test-id="login-loader"]');
   }
+  function registerButton() {
+    return page.querySelector('[test-id="register-button"]');
+  }
 
 });
 
 class AuthenticationServiceMock {
   _singInResponse = new Subject();
+  _recoverPasswordResponse = new Subject();
   singIn() {
     return this._singInResponse.asObservable();
+  }
+
+  recoverPassword() {
+    return this._recoverPasswordResponse.asObservable()
   }
 }
 

@@ -18,11 +18,15 @@
             <mat-error>Password is <strong>required</strong></mat-error>
             }
         </mat-form-field>
-        <button mat-button test-id="recover-password-button" [disabled]="!form.get('email')!.valid">Recover
+        <button mat-button test-id="recover-password-button" [disabled]="!form.get('email')!.valid"
+            (click)="recoverPassword()" *ngIf="!isRecoveringPassword">Recover
             password</button>
-        <button mat-raised-button color="primary" test-id="login-button" [disabled]="!form.valid" (click)="login()" *ngIf="!isLogginIn">LOGIN</button>
+        <button mat-button test-id="recover-password-button" test-id="recover-password-loader"
+            *ngIf="isRecoveringPassword"><mat-spinner diameter="20" color="primary"></mat-spinner></button>
+        <button mat-raised-button color="primary" test-id="login-button" [disabled]="!form.valid" (click)="login()"
+            *ngIf="!isLogginIn">LOGIN</button>
         <button mat-raised-button color="primary" test-id="login-loader" *ngIf="isLogginIn"><mat-spinner diameter="20"
                 color="accent"></mat-spinner></button>
-        <button mat-stroked-button color="primary">REGISTER</button>
+        <button mat-stroked-button color="primary" test-id="register-button" (click)="register()">REGISTER</button>
     </form>
 </main>
